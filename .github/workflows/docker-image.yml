@@ -39,7 +39,12 @@ jobs:
       env:
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        echo "new version : $NEW_VERSION"
-
-    - name: Verify Docker Login
-      run: docker info
+        docker build -t pablodionisio/docker-graphql:$NEW_VERSION .
+        docker build -t pablodionisio/docker-graphql:latest .
+        
+    - name: Push Docker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker push pablodionisio/docker-graphql:$NEW_VERSION
+        docker push pablodionisio/docker-graphql:latest
